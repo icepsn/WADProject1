@@ -1,39 +1,35 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
-const CarTable = ({ carStatistics }) => {
+function CarTable({ brands }) {
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Brand</TableCell>
-            <TableCell>Model</TableCell>
-            <TableCell>Number of Cars</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {Object.entries(carStatistics).map(([brand, brandData]) => (
-            <>
-              <TableRow key={brand}>
-                <TableCell>{brand}</TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>{brandData.total}</TableCell>
-              </TableRow>
-              {Object.entries(brandData.models).map(([model, count]) => (
-                <TableRow key={model}>
-                  <TableCell></TableCell>
-                  <TableCell>{model}</TableCell>
-                  <TableCell>{count}</TableCell>
-                </TableRow>
-              ))}
-            </>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <table>
+      <thead>
+        <tr>
+          <th>Brand</th>
+          <th>Model</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Object.keys(brands).map((brand) => (
+          <>
+            <tr key={brand}>
+              <td>{brand}</td>
+              <td></td>
+              <td>{brands[brand].total}</td>
+            </tr>
+            {Object.keys(brands[brand].models).map((model) => (
+              <tr key={model}>
+                <td></td>
+                <td>{model}</td>
+                <td>{brands[brand].models[model]}</td>
+              </tr>
+            ))}
+          </>
+        ))}
+      </tbody>
+    </table>
   );
-};
+}
 
 export default CarTable;
-

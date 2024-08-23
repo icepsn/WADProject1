@@ -1,27 +1,28 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { Bar } from 'react-chartjs-2';
 
-const StackedBarChartComponent = ({ carStatistics }) => {
-  const data = Object.entries(carStatistics).map(([brand, data]) => {
-    const entry = { brand };
-    Object.entries(data.models).forEach(([model, count]) => {
-      entry[model] = count;
-    });
-    return entry;
-  });
+function StackedBarChartComponent({ brands }) {
+  const data = {
+    labels: Object.keys(brands),
+    datasets: Object.keys(brands).map((brand, i) => ({
+      label: brand,
+      data: Object.keys(brands[brand].models).map(model => brands[brand].models[model]),
+      backgroundColor: `rgba(${i * 50}, ${i * 50}, ${i * 50}, 0.5)`
+    }))
+  };
 
-  return (
-    <BarChart width={500} height={300} data={data}>
-      <XAxis dataKey="brand" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      {Object.keys(carStatistics[Object.keys(carStatistics)[0]].models).map((model) => (
-        <Bar key={model} dataKey={model} stackId="a" fill="#82ca9d" />
-      ))}
-    </BarChart>
-  );
-};
+  const options = {
+    scales: {
+      x: {
+        stacked: true
+      },
+      y: {
+        stacked: true
+      }
+    }
+  };
+
+  return <Bar data={data} options={options} />;
+}
 
 export default StackedBarChartComponent;
-

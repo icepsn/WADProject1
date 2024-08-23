@@ -1,57 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import CarTable from './CarTable';
 import PieChartComponent from './PieChartComponent';
 import StackedBarChartComponent from './StackedBarChartComponent';
 import carsData from '../cars.json';
-import { Grid, Paper, Typography } from '@mui/material';
 
-const Dashboard = () => {
-  const [carData, setCarData] = useState([]);
+function Dashboard() {
+  const brands = {};
 
-  useEffect(() => {
-    setCarData(carsData.Cars);
-  }, []);
+  carsData.forEach(car => {
+    if (!brands[car.brand]) {
+      brands[car.brand] = {
+        total: 0,
+        models: {}
+      };
+    }
 
-  const getCarStatistics = () => {
-    const stats = {};
-    carData.forEach((car) => {
-      if (!stats[car.Brand]) {
-        stats[car.Brand] = { total: 0, value: 0, models: {} };
-      }
-      stats[car.Brand].total += 1;
-      stats[car.Brand].value += car.Prc;
-      if (!stats[car.Brand].models[car.Model]) {
-        stats[car.Brand].models[car.Model] = 0;
-      }
-      stats[car.Brand].models[car.Model] += 1;
-    });
-    return stats;
-  };
-
-  const carStatistics = getCarStatistics();
+    brands[car.brand].total += 1;
+    if (!brands[car.brand].models[car.model]) {
+      brands[car.brand].models[car.model] = 0;
+    }
+    brands[car.brand].models[car.model] += 1;
+  });
 
   return (
     <div>
-      <Typography variant="h4" gutterBottom>Dashboard</Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2 }}>
-            <CarTable carStatistics={carStatistics} />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2 }}>
-            <PieChartComponent carStatistics={carStatistics} />
-          </Paper>
-        </Grid>
-        <Grid item xs={12}>
-          <Paper sx={{ p: 2 }}>
-            <StackedBarChartComponent carStatistics={carStatistics} />
-          </Paper>
-        </Grid>
-      </Grid>
+      <h1>Dashboard</h1>
+      <CarTable brands={brands} />
+      <PieChartComponent brands={brands} />
+      <StackedBarChartComponent brands={brands} />
     </div>
   );
-};
+}
 
 export default Dashboard;
